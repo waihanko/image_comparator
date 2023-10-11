@@ -38,11 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: ImageComparatorView(
 
-          thumbOffset: 0.2,
           image1: Image.asset("assets/images/before.jpg", fit: BoxFit.cover,),
           image2: Image.asset("assets/images/after.png", fit: BoxFit.cover,),
-          thumbColor: Colors.red,
-          controlLineColor: Colors.red,
+          handleLineColor: Colors.yellow,
+          thumbOffset: 0.5,
+          thumb: Icon(
+            Icons.ac_unit_outlined,
+            color: Colors.white,
+          ),
         ),
       ),
     );
