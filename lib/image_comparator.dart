@@ -33,21 +33,7 @@ class _ImageComparatorViewState extends State<ImageComparatorView> {
   double maxWidth = 0.0;
   Size thumbSize = const Size(0, 0);
 
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => setState(
-        () {
-          if (controlPointX == 0 && widget.width != null) {
-            controlPointX = maxWidth * 0.5;
-          }else{
-            controlPointX = widget.width! * 0.5;
-          }
-        },
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {

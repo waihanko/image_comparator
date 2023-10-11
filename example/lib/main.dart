@@ -37,7 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Center(
         child: ImageComparatorView(
-
+          height: 500,
+          width: 500,
           image1: Image.asset("assets/images/before.jpg", fit: BoxFit.cover,),
           image2: Image.asset("assets/images/after.png", fit: BoxFit.cover,),
           handleLineColor: Colors.yellow,
