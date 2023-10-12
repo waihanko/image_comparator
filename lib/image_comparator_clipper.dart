@@ -1,4 +1,5 @@
 part of 'image_comparator.dart';
+
 class _ImageComparatorClipper extends CustomClipper<Path> {
   final double controlPosition;
 

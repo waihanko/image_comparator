@@ -1,6 +1,6 @@
 name: image_comparator
 description: This package allows you to effortlessly compare two images by providing a draggable control point that can be customized to suit your application's design.
-version: 0.0.1
+version: 1.0.0
 homepage:
 
 environment:
