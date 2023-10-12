@@ -1,39 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class ImageComparatorView extends StatefulWidget {
+part 'image_comparator_clipper.dart';
+
+part 'widget_size_helper.dart';
+
+class ImageComparatorWidget extends StatefulWidget {
   final double? width;
   final double? height;
-  final double thumbOffset;
+  final double thumbPositionOffset;
   final double controlLineWidth;
-  final Color handleLineColor;
+  final double controlLineInitialOffset;
+  final Color controlLineColor;
   final Widget? image1;
   final Widget? image2;
   final Widget? thumb;
 
-  const ImageComparatorView({
+  const ImageComparatorWidget({
     super.key,
     this.width,
     this.height,
-    this.thumbOffset = 0.5,
-    this.handleLineColor = Colors.white,
+    this.controlLineColor = Colors.white,
     this.controlLineWidth = 2,
     this.thumb,
+    this.thumbPositionOffset = 0.5,
+    this.controlLineInitialOffset = 0.5,
     this.image1,
     this.image2,
-  }) : assert(thumbOffset > -1 && thumbOffset < 101,
-            "controlInitialPosition must between 0 and 100");
+  })  : assert(thumbPositionOffset > -1 && thumbPositionOffset <= 1,
+            "thumbPositionOffset must between 0 and 1"),
+        assert(controlLineInitialOffset > -1 && controlLineInitialOffset <= 1,
+            "controlLineInitialOffset must between 0 and 1");
 
   @override
-  State<ImageComparatorView> createState() => _ImageComparatorViewState();
+  State<ImageComparatorWidget> createState() => _ImageComparatorWidgetState();
 }
 
-class _ImageComparatorViewState extends State<ImageComparatorView> {
-  double controlPointX = 0.0;
-  double maxWidth = 0.0;
+class _ImageComparatorWidgetState extends State<ImageComparatorWidget> {
+  double controlPointX = 0;
   Size thumbSize = const Size(0, 0);
+  double maxWidth = 0;
 
-
+  @override
+  void initState() {
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) {
+        if (mounted) {
+          controlPointX = maxWidth * widget.controlLineInitialOffset;
+        }
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +79,16 @@ class _ImageComparatorViewState extends State<ImageComparatorView> {
             height: constraints.maxHeight,
             color: Colors.transparent,
             child: Stack(
-              children: <Widget>[
+              children: [
                 SizedBox(
                   width: double.infinity,
                   height: double.infinity,
                   child: widget.image1,
                 ),
                 ClipPath(
-                  clipper:
-                      ImageComparatorClipper(controlPosition: controlPointX),
+                  clipper: _ImageComparatorClipper(
+                    controlPosition: controlPointX,
+                  ),
                   child: SizedBox(
                     width: double.infinity,
                     height: double.infinity,
@@ -78,31 +97,34 @@ class _ImageComparatorViewState extends State<ImageComparatorView> {
                 ),
                 Positioned(
                   left: controlPointX,
-                  bottom: (constraints.maxHeight - thumbSize.height) *
-                          (widget.thumbOffset)!.toDouble() +
-                      thumbSize.height,
-                  child: Container(
-                    width: 2,
-                    height: constraints.maxHeight,
-                    color: Colors.red,
+                  bottom: (constraints.maxHeight -
+                      (constraints.maxHeight - thumbSize.height) *
+                          (widget.thumbPositionOffset)),
+                  child: Center(
+                    child: Container(
+                      width: widget.controlLineWidth,
+                      height: constraints.maxHeight,
+                      color: widget.controlLineColor,
+                    ),
                   ),
                 ),
                 Positioned(
                   left: controlPointX,
-                  top: (constraints.maxHeight - thumbSize.height) *
-                          (widget.thumbOffset)!.toDouble() +
+                  top: ((constraints.maxHeight - thumbSize.height) *
+                          (widget.thumbPositionOffset)) +
                       thumbSize.height,
                   child: Container(
-                    width: 2,
+                    width: widget.controlLineWidth,
                     height: constraints.maxHeight,
-                    color: Colors.red,
+                    color: widget.controlLineColor,
                   ),
                 ),
                 Positioned(
-                  left: (controlPointX + 1) - (thumbSize.width / 2),
+                  left: (controlPointX + (widget.controlLineWidth / 2)) -
+                      (thumbSize.width / 2),
                   top: (constraints.maxHeight - thumbSize.height) *
-                      (widget.thumbOffset)!.toDouble(),
-                  child: WidgetSize(
+                      (widget.thumbPositionOffset).toDouble(),
+                  child: _WidgetSizeHelper(
                     onChange: (Size size) {
                       setState(() {
                         thumbSize = size;
@@ -117,66 +139,5 @@ class _ImageComparatorViewState extends State<ImageComparatorView> {
         );
       }),
     );
-  }
-}
-
-class WidgetSize extends StatefulWidget {
-  final Widget child;
-  final Function onChange;
-
-  const WidgetSize({
-    Key? key,
-    required this.onChange,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  State<WidgetSize> createState() => _WidgetSizeState();
-}
-
-class _WidgetSizeState extends State<WidgetSize> {
-  @override
-  Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback(postFrameCallback);
-    return Container(
-      key: widgetKey,
-      child: widget.child,
-    );
-  }
-
-  var widgetKey = GlobalKey();
-  var oldSize;
-
-  void postFrameCallback(_) {
-    var context = widgetKey.currentContext;
-    if (context == null) return;
-
-    var newSize = context.size;
-    if (oldSize == newSize) return;
-
-    oldSize = newSize;
-    widget.onChange(newSize);
-  }
-}
-
-class ImageComparatorClipper extends CustomClipper<Path> {
-  final double controlPosition;
-
-  ImageComparatorClipper({required this.controlPosition});
-
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.moveTo(controlPosition, 0); //size.width * 0.25 => variable
-    path.lineTo(size.width, 0.0);
-    path.lineTo(size.width, size.height);
-    path.lineTo(controlPosition, size.height);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper oldClipper) {
-    return true;
   }
 }
