@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderRadius: BorderRadius.circular(12),
                 child: ImageComparatorWidget(
                   image1: Image.asset("assets/images/before.jpg", fit: BoxFit.cover,),
-                  image2: Image.asset("assets/images/after.png", fit: BoxFit.cover,),
+                  image2: Image.asset("assets/images/after.jpg", fit: BoxFit.cover,),
                   controlLineWidth: 2,
                   controlLineColor: controlLineColor[selectedColorIndex],
                   thumbPositionOffset: thumbPositionOffset,
