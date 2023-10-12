@@ -60,14 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(18),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: ImageComparatorWidget(
+                child: ImageComparator(
                   image1: Image.asset("assets/images/before.jpg", fit: BoxFit.cover,),
                   image2: Image.asset("assets/images/after.jpg", fit: BoxFit.cover,),
                   controlLineWidth: 2,
                   controlLineColor: controlLineColor[selectedColorIndex],
-                  thumbPositionOffset: thumbPositionOffset,
-                  thumb: getThumbStyle(thumbStyle, controlColor: controlLineColor[selectedColorIndex]),
-                  controlLineInitialOffset: 0.5,
+                  controlVerticalOffset: thumbPositionOffset,
+                  controlThumb: getThumbStyle(thumbStyle, controlColor: controlLineColor[selectedColorIndex]),
+                  controlHorizontalOffset: 0.5,
                 ),
               ),
             ),
