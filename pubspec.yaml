@@ -1,5 +1,5 @@
 name: image_comparator
-description: A Flutter package for creating an image comparison widget with highly customizable.
+description: This package allows you to effortlessly compare two images by providing a draggable control point that can be customized to suit your application's design.
 version: 0.0.1
 homepage:
 
@@ -15,7 +15,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
