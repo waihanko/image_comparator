@@ -1,10 +1,11 @@
 name: image_comparator
 description: This package allows you to effortlessly compare two images by providing a draggable control point that can be customized to suit your application's design.
-version: 1.0.0
-homepage:
+version: 1.0.2
+
+homepage: https://github.com/waihanko/image_comparator
 
 environment:
-  sdk: '>=3.1.3 <4.0.0'
+  sdk: '>=2.19.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
